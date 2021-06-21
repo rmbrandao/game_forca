@@ -1,0 +1,96 @@
+<html>
+   <head>
+      <meta charset="UTF-8">
+      <title>Jogo da Forca</title>
+      <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+      <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="style.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+      </style>
+   </head>
+   <body>
+      <a onclick="reload()" style="font-size: 40px; margin: 1rem" href=""><i class="fas fa-redo-alt"></i></a>
+      <div id="conteudo" class="container">
+         <div class="cabecalho">
+            <h1>Jogo da Forca</h1>
+            <h3>Tente advinhar a palavra</h3>
+            <h2>Jogador da vez:</h2>
+            <h1 id="player_view" style="color: greenyellow;"></h1>
+         </div>
+         <div class="field">
+            <div>
+               <h2 id="pontos_field" style="text-align: center;"></h2>
+               <h3 id="jogador1" style="text-align: center;"></h3>
+               <h3 id="jogador2" style="text-align: center;"></h3>
+               <h3 id="jogador3" style="text-align: center;"></h3>
+            </div>
+            <div class="field-center">
+               <input id="plv1" type="hidden"></input>
+               <input id="plv2" type="hidden"></input>
+               <input id="plv3" type="hidden"></input>
+   
+               <h3 style="color: black;" id="letraserradas">Letras erradas: </h3>
+   
+               <h3 id="palavra1"></h3>
+               <h3 id="palavra2"></h3>
+               <h3 id="palavra3"></h3>
+               
+               <div class="card__todo">
+                  <h2>Escolha a letra</h2>
+                  <div class="cursor">
+                     <a id="A" onclick="escolheLetra('A')">A</a>
+                     <a id="B" onclick="escolheLetra('B')">B</a>
+                     <a id="C" onclick="escolheLetra('C')">C</a>
+                     <a id="D" onclick="escolheLetra('D')">D</a>
+                     <a id="E" onclick="escolheLetra('E')">E</a>
+                     <a id="F" onclick="escolheLetra('F')">F</a>
+                     <a id="G" onclick="escolheLetra('G')">G</a>
+                     <a id="H" onclick="escolheLetra('H')">H</a>
+                     <a id="I" onclick="escolheLetra('I')">I</a>
+                     <a id="J" onclick="escolheLetra('J')">J</a>
+                     <a id="K" onclick="escolheLetra('K')">K</a>
+                     <a id="L" onclick="escolheLetra('L')">L</a>
+                     <a id="M" onclick="escolheLetra('M')">M</a>
+                     <a id="N" onclick="escolheLetra('N')">N</a>
+                     <a id="O" onclick="escolheLetra('O')">O</a>
+                     <a id="P" onclick="escolheLetra('P')">P</a>
+                     <a id="Q" onclick="escolheLetra('Q')">Q</a>
+                     <a id="R" onclick="escolheLetra('R')">R</a>
+                     <a id="S" onclick="escolheLetra('S')">S</a>
+                     <a id="T" onclick="escolheLetra('T')">T</a>
+                     <a id="U" onclick="escolheLetra('U')">U</a>
+                     <a id="V" onclick="escolheLetra('V')">V</a>
+                     <a id="X" onclick="escolheLetra('X')">X</a>
+                     <a id="Y" onclick="escolheLetra('Y')">Y</a>
+                     <a id="W" onclick="escolheLetra('W')">W</a>
+                     <a id="Z" onclick="escolheLetra('Z')">Z</a>
+                  </div>
+               </div>
+            </div>
+            <div class="inputs">
+               <div class="space">
+                  <label>Palavra 1</label>
+                  <input id="palavracorreta1"></input>
+                  <button id="validarpalavra1" onclick="validarPalavra(palavracorreta1.value, 1)">Validar Palavra 1</button>
+               </div>
+               <div class="space">
+                  <label>Palavra 2</label>
+                  <input id="palavracorreta2"></input>
+                  <button id="validarpalavra2" onclick="validarPalavra(palavracorreta2.value, 2)">Validar Palavra 2</button>
+               </div>
+               <div class="space">
+                  <label>Palavra 3</label>
+                  <input id="palavracorreta3"></input>
+                  <button id="validarpalavra3" onclick="validarPalavra(palavracorreta3.value, 3)">Validar Palavra 3</button>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div id="vencedor" class="display_none">
+         <h1 id="player-win"></h1>
+         <h1 id="player-ponts"></h1>
+      </div>
+      
+      <script src="todos.js" type="text/javascript"></script>
+   </body>
+</html>
