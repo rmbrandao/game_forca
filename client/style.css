@@ -1,155 +1,154 @@
 * {
-    box-sizing: border-box;
-  }
-  
-  body {
-    margin: 0;
-    min-width: 250px;
-    background-color: #8257e5;
-    color: #f0f0f0;
-    font-family: "Roboto", sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  box-sizing: border-box;
+}
 
-  #login{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    /* height: 100vh; */
-  }
+body {
+  margin: 0;
+  min-width: 250px;
+  background-color: #8257e5;
+  color: #f0f0f0;
+  font-family: "Roboto", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-
-  /* Style the header */
-  .card__todo {
-    margin: 5px;
-    background-color: transparent;
-    padding: 30px 60px;
-    color: white;
-    text-align: center;
-  }
-
-  .cursor{
-    cursor: pointer;
-  }
-
-  .cursor a{
-    font-size: 20px;
-  }
-  
-  .card__todo:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-
-  .inputs{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .space{
-    margin-bottom: 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .space input{ 
-    height: 2rem;
-    border: none;
-    border-radius: 5px;
-    font-size: 20px;
-  }
-
-  .space input:focus{
-    outline: none;
-  }
-
-  .space button:focus{
-    outline: none;
-    animation: btn 0.2s;
-  }
-
-  @keyframes btn {
-    from {transform: scale(0.92);}
-    to {transform: scale(1);}
-  }
-
-  .space button{
-    margin-top: 0.5rem;
-    height: 2rem;
-    background-color: rgb(41, 185, 36);
-    border: none;
-    border-radius: 5px;
-  }
-
-  .space button:hover{
-    background-color: rgb(36, 163, 32);
-  }
-  
-  .field{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin: 2rem;
-  } 
-
-  a.disabled {
-    pointer-events: none;
-    color: rgba(204, 204, 204, 0.3);
-  }
-
-  div.disabled {
-    pointer-events: none;
-    color: rgba(204, 204, 204, 0.3);
-  }
+#login{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* height: 100vh; */
+}
 
 
-  .field-center{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0;
-  }
+/* Style the header */
+.card__todo {
+  margin: 5px;
+  background-color: transparent;
+  padding: 30px 60px;
+  color: white;
+  text-align: center;
+}
 
-  .cabecalho{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 2rem;
-  }
+.cursor{
+  cursor: pointer;
+}
 
-  h1, h2, h3{
-    margin-top: 0;
-    margin-bottom: 0.8rem;
-  }
+.cursor a{
+  font-size: 20px;
+}
 
-  .field-center h3{
-    font-size: 22px;
-  }
+.card__todo:after {
+  content: "";
+  display: table;
+  clear: both;
+}
 
-  .display_none{
-    display: none;
-  }
+.inputs{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  #vencedor{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.space{
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
-  .input-login input{
-    height: 40px;
-    font-size: 18px;
-  }
+.space input{ 
+  height: 2rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+}
 
-  .input-login{
-    padding-bottom: 3rem;
-  }
+.space input:focus{
+  outline: none;
+}
 
-  
+.space button:focus{
+  outline: none;
+  animation: btn 0.2s;
+}
+
+@keyframes btn {
+  from {transform: scale(0.92);}
+  to {transform: scale(1);}
+}
+
+.space button{
+  margin-top: 0.5rem;
+  height: 2rem;
+  background-color: rgb(41, 185, 36);
+  border: none;
+  border-radius: 5px;
+}
+
+.space button:hover{
+  background-color: rgb(36, 163, 32);
+}
+
+.field{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 2rem;
+} 
+
+a.disabled {
+  pointer-events: none;
+  color: rgba(204, 204, 204, 0.3);
+}
+
+div.disabled {
+  pointer-events: none;
+  color: rgba(204, 204, 204, 0.3);
+}
+
+
+.field-center{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
+.cabecalho{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+h1, h2, h3{
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+}
+
+.field-center h3{
+  font-size: 22px;
+}
+
+.display_none{
+  display: none;
+}
+
+#vencedor{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-login input{
+  height: 40px;
+  font-size: 18px;
+}
+
+.input-login{
+  padding-bottom: 3rem;
+}
+

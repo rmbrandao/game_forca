@@ -1,4 +1,5 @@
-const { app, BrowserWindow, nativeImage } = require("electron");
+const { app, BrowserWindow, nativeImage, ipcMain } = require("electron");
+const { machineIdSync } = require("node-machine-id");
 
 // Habilita o live reload no Electron e no FrontEnd da aplicação com a lib electron-reload
 // Assim que alguma alteração no código é feita
@@ -34,13 +35,19 @@ function createWindow() {
   // Abre o console do navegador (DevTools),
   // manter apenas quando estiver desenvolvendo a aplicação,
   // pode utilizar variáveis de ambiente do node para executar esse código apenas quando estiver em modo DEV
-  // win.webContents.openDevTools();
+  win.webContents.openDevTools();
+
+  win.webContents.on('did-finish-load', () => {
+    win.webContents.send('register', machineIdSync());
+  });
+
+  return win;
 }
 
 // Método vai ser chamado assim que o Electron finalizar sua inicialização
 // e estiver pronto para abrir e manipular o nosso código.
 // Algumas APIs podem ser usadas somente depois que este evento ocorre.
-app.whenReady().then(createWindow);
+app.whenReady().then();
 
 // Quando clicarmos no botão de fechar a janela no app desktop
 // O evento vai ser ouvido aqui no arquivo main.js e algum procedimento pode ser realizado
@@ -65,3 +72,13 @@ app.on("activate", () => {
 
 // Abaixo você pode colocar seus códigos específicos do BackEnd que precisam executar no processo principal
 // pode criar pastas e arquivos separados e importar aqui (boa prática).
+app.on('ready', async() => {
+  win = createWindow();
+  // const mqS = require('./mqService');
+  // const mq = new mqS(win);
+  // await mq.init();
+});
+
+ipcMain.on('NEW_MQ_MESSAGE_TO_MAIN', (event, message) => {
+  win.webContents.send('NEW_MQ_MESSAGE', message);
+});

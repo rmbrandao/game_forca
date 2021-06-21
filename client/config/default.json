@@ -1,0 +1,16 @@
+{
+    "mq": {
+        "protocol": "amqp",
+        "hostname": "localhost",
+        "port": 5672,
+        "username": "guest",
+        "password": "guest",
+        "locale": "pt_BR",
+        "server": {
+            "exchange": "server.to.players.exchange"
+        },
+        "client": {
+            "queue": "players.to.server.queue"
+        }
+    }
+}
