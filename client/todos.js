@@ -1,57 +1,98 @@
 "use strict";
 
-const axios = require('axios');
-var bfim = false;
-var jog1 = 0;
-var jog2 = 0;
-var jog3 = 0;
-var pontos = Math.floor(Math.random() * 11);
-var jogador_da_vez = Math.floor(Math.random() * 3)+1;
-var palavras_completas = [];
-var champion = { 'jogador': '', 'pontos': 0}
+const wsurl = 'ws://localhost:8080/';
+const WebSocket = require('ws');
 
-function add_pontos(pontos, player){
-  if(player === 1){
-    jog1 = jog1 + pontos;
-    document.getElementById("jogador1").innerHTML = "Jogador 1: " + jog1;
-  } else if (player === 2){
-    jog2 = jog2 + pontos;
-    document.getElementById("jogador2").innerHTML = "Jogador 2: " + jog2;
-  } else{
-    jog3 = jog3 + pontos;
-    document.getElementById("jogador3").innerHTML = "Jogador 3: " + jog3;
+const ws = new WebSocket(wsurl);
+
+var dado = null;
+var send_server = {
+  update_w: [],
+  wrong_letters: [],
+  next_player: false,
+  tipo: 'update_w',
+  logado: false,
+  acertos: 0,
+  validar_palavra: {
+    palavra: '',
+    posicao: null,
   }
-}
+};
 
-function next_player(player){
-  if(player === 1){
-    jogador_da_vez = 2
-  } else if (player === 2){
-    jogador_da_vez =  3;
-  } else{
-    jogador_da_vez = 1;
+ws.on('message', data => {
+  dado = JSON.parse(data);
+
+  if(dado.vencedor){
+    champion()
   }
-  document.getElementById("player_view").innerHTML =  jogador_da_vez;
-}
-
-function validarPalavra(palavra, numeroPalavra){
-  if (document.getElementById("plv"+numeroPalavra).value == palavra.toUpperCase()) {
-    document.getElementById("palavra"+numeroPalavra).innerHTML = palavra.toUpperCase();
-    add_pontos(50, jogador_da_vez);
-    palavras_completas.push(numeroPalavra);
-    win();
-  } else{
-    document.getElementById("palavracorreta"+numeroPalavra).value = '';
-    next_player(jogador_da_vez);
+  document.getElementById("player_name").innerHTML = dado.name;
+  if(dado.status === 'aguardando_jogadores'){
+    document.getElementById("conteudo").classList.add("display_none");
+    document.getElementById("btn_login").classList.add("display_none");
+    document.getElementById("msg_wait_player").classList.remove("display_none");
+  } else if(dado.status === 'iniciado'){
+    document.getElementById("conteudo").classList.remove("display_none");
+    document.getElementById("btn_login").classList.add("display_none");
+    document.getElementById("msg_wait_player").classList.add("display_none");
+    document.getElementById("login").setAttribute("style","display:none");
+  } else if(dado.status === 'pronto_para_iniciar'){ 
+    document.getElementById("conteudo").classList.add("display_none");
+    document.getElementById("msg_wait_player").classList.add("display_none");
+    document.getElementById("btn_login").classList.remove("display_none");
   }
-}
+  
+  document.getElementById("pontos_field").innerHTML = "Pontos da jogada: " + dado.round_points;
+  if(!dado.now){
+    document.getElementById("player_view").innerHTML = dado.jogador_vez_nome;
+    document.getElementById("letter_field").classList.add("disabled")
+    document.getElementById("inputs").classList.add("disabled")
+  } else {
+    document.getElementById("player_view").innerHTML = dado.jogador_vez_nome;
+    document.getElementById("letter_field").classList.remove("disabled")
+    document.getElementById("inputs").classList.remove("disabled")
+  }
 
-window.addEventListener('load', function() {
-  axios.get('http://localhost:3000/novo_jogo').then(function(resposta){
+  if(dado.jogadores.length) {
+    let jogadores = '';
+    dado.jogadores.forEach(jogador => {
+      jogadores += `
+        <h2>${jogador.nome}: ${jogador.pontuacao}</h2>
+      `;
+  
+      document.getElementById("jogadores").innerHTML = jogadores;
+    });
+  }  
+
+  get_palavras(dado.palavras, dado.palavrasTraco);
+
+  if (dado.palavras_completas.length) {
+    for (var i = 1; i < 4; i++) {
+        if (dado.palavras_completas.includes(i)) {
+            document.getElementById("palavra" + i).innerHTML = dado.palavras[i - 1].palavra.toUpperCase();
+        }
+    }
+  }
+  
+  for(var i=0; i<dado.wrong_letters.length; i++){
+    document.getElementById("letraserradas").innerHTML = document.getElementById("letraserradas").innerHTML+ ' ' + dado.wrong_letters[i];
+  }
+  
+});
+
+ws.on('error', err => {
+  console.log(err);
+});
+
+function get_palavras(palavras, update_field){
+  if(update_field.length){
+    for(var i = 0; i<update_field.length; i++){
+      document.getElementById("palavra"+(i+1)).innerHTML = update_field[i];
+    }
+  } else{
     for(var i = 0; i< 3; i++){
       var aux = '';
-      for (var j = 0; j < resposta.data[i]['tamanho']; j++) {
-        if (j == (resposta.data[i]['tamanho'] - 1)){
+      for (var j = 0; j < palavras[i]['tamanho']; j++) {
+        if (j == (palavras[i]['tamanho'] - 1)){
           aux = aux+'_';
         }else{
           aux = aux+'_ ';
@@ -59,28 +100,24 @@ window.addEventListener('load', function() {
       }
       document.getElementById("palavra"+(i+1)).innerHTML = aux;
     }
-    document.getElementById("jogador1").innerHTML = "Jogador 1: " + jog1;
-    document.getElementById("jogador2").innerHTML = "Jogador 2: " + jog2;
-    document.getElementById("jogador3").innerHTML = "Jogador 3: " + jog3;
-    document.getElementById("pontos_field").innerHTML = "Pontos da jogada: " + pontos;
-    document.getElementById("player_view").innerHTML = jogador_da_vez;
-    document.getElementById("plv1").value = resposta.data[0]['palavra'];
-    document.getElementById("plv2").value = resposta.data[1]['palavra'];
-    document.getElementById("plv3").value = resposta.data[2]['palavra'];
+  }
+  document.getElementById("plv1").value = palavras[0]['palavra'];
+  document.getElementById("plv2").value = palavras[1]['palavra'];
+  document.getElementById("plv3").value = palavras[2]['palavra'];
+}
 
-    console.log(resposta.data);
-  }).catch(function (error){
-    if (error){
-      console.log('ferro -> '+error);
-    }
-  });
-});
+function validarPalavra(palavra, campo){
+  send_server.validar_palavra.palavra = palavra;
+  send_server.validar_palavra.posicao = campo;
+  ws.send(JSON.stringify(send_server));
+}
 
 function escolheLetra(letra) {
+  let acertos = 0;
   document.getElementById(letra).classList.add("disabled")
   var existeletra = false;
   for(var i = 1; i <= 3; i++){
-    if(!palavras_completas.includes(i)){
+    if(!dado.palavras_completas.includes(i)){
       var palavra = document.getElementById("plv"+i).value;
       if(palavra.includes(letra)){
         var aux = document.getElementById("palavra"+i).innerHTML.split(' ');
@@ -88,49 +125,47 @@ function escolheLetra(letra) {
           if (palavra[j] == letra){
             existeletra = true;
             aux[j] = letra;
-            document.getElementById("player_view").innerHTML = jogador_da_vez;
-            add_pontos(pontos, jogador_da_vez);
+            acertos++;
           }
         }
         document.getElementById("palavra"+i).innerHTML = aux.join(' ');
-        console.log(!aux.includes("_"));
-        if (!aux.includes("_")){
-          palavras_completas.push(i);
-          console.log(palavras_completas)
+        if (!aux.includes("_")) {
+          validarPalavra(dado.palavras[i - 1].palavra, i);
         }
       }
     }
   }
+
+  send_server.acertos = acertos;
+  
   if (!existeletra) {
-    next_player(jogador_da_vez);
-    document.getElementById("letraserradas").innerHTML = document.getElementById("letraserradas").innerHTML+' '+letra;
+    send_server.next_player = true;
+    send_server.wrong_letters = letra;
   }
-  pontos = Math.floor(Math.random() * 11);
-  document.getElementById("pontos_field").innerHTML = "Pontos da jogada: " + pontos;
-  win()
+
+  send_server.update_w.push(document.getElementById("palavra1").innerHTML);
+  send_server.update_w.push(document.getElementById("palavra2").innerHTML);
+  send_server.update_w.push(document.getElementById("palavra3").innerHTML);
+
+  ws.send(JSON.stringify(send_server));
+
+  send_server.next_player = false;
+  send_server.update_w = [];
+  send_server.wrong_letters = [];
 }
 
 function reload(){
   window.location.reload();
 }
 
-function win(){
-  if(palavras_completas.includes(1) && palavras_completas.includes(2) && palavras_completas.includes(3)){
-    var max = Math.max(jog1, jog2, jog3);
-    if( jog1 === max){
-      champion.jogador = ' JOGADOR 1';
-      champion.pontos = jog1;
-    } else if(jog2 === max){
-      champion.jogador = ' JOGADOR 2';
-      champion.pontos = jog2;
-    } else{
-      champion.jogador = ' JOGADOR 3';
-      champion.pontos = jog3;
-    }
+function logar(){
+  send_server.logado = true;
+  ws.send(JSON.stringify(send_server));
+}
+
+function champion(){
     document.getElementById("conteudo").classList.add('display_none');
     document.getElementById("vencedor").classList.remove('display_none');
-    document.getElementById("player-win").innerHTML = "PARABENS " + champion.jogador;
-    document.getElementById("player-ponts").innerHTML = "Você marcou " + champion.pontos + " pontos";
-  }
-  
+    document.getElementById("player-win").innerHTML = "PARABENS " + dado.vencedor.nome;
+    document.getElementById("player-ponts").innerHTML = "Você marcou " + dado.vencedor.pontuacao + " pontos";
 }

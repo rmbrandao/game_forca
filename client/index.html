@@ -9,7 +9,13 @@
       </style>
    </head>
    <body>
-      <a onclick="reload()" style="font-size: 40px; margin: 1rem" href=""><i class="fas fa-redo-alt"></i></a>
+      <!-- <a onclick="reload()" style="font-size: 40px; margin: 1rem" href=""><i class="fas fa-redo-alt"></i></a> -->
+      <div id="login">
+         <h1 style="padding-bottom: 3rem;">Jogo da Forca</h1>
+         <h2 id="player_name"></h2>
+         <h4 id="msg_wait_player">Aguardando Jogadores</h4>
+         <button id="btn_login" onclick="logar()">Logar</button>
+      </div>
       <div id="conteudo" class="container">
          <div class="cabecalho">
             <h1>Jogo da Forca</h1>
@@ -20,9 +26,7 @@
          <div class="field">
             <div>
                <h2 id="pontos_field" style="text-align: center;"></h2>
-               <h3 id="jogador1" style="text-align: center;"></h3>
-               <h3 id="jogador2" style="text-align: center;"></h3>
-               <h3 id="jogador3" style="text-align: center;"></h3>
+               <div id="jogadores"></div>
             </div>
             <div class="field-center">
                <input id="plv1" type="hidden"></input>
@@ -35,7 +39,7 @@
                <h3 id="palavra2"></h3>
                <h3 id="palavra3"></h3>
                
-               <div class="card__todo">
+               <div id="letter_field" class="card__todo">
                   <h2>Escolha a letra</h2>
                   <div class="cursor">
                      <a id="A" onclick="escolheLetra('A')">A</a>
@@ -67,21 +71,21 @@
                   </div>
                </div>
             </div>
-            <div class="inputs">
+            <div id="inputs" class="inputs">
                <div class="space">
                   <label>Palavra 1</label>
                   <input id="palavracorreta1"></input>
-                  <button id="validarpalavra1" onclick="validarPalavra(palavracorreta1.value, 1)">Validar Palavra 1</button>
+                  <button id="validarpalavra1" onclick="validarPalavra(palavracorreta1.value.toUpperCase(), 1)">Validar Palavra 1</button>
                </div>
                <div class="space">
                   <label>Palavra 2</label>
                   <input id="palavracorreta2"></input>
-                  <button id="validarpalavra2" onclick="validarPalavra(palavracorreta2.value, 2)">Validar Palavra 2</button>
+                  <button id="validarpalavra2" onclick="validarPalavra(palavracorreta2.value.toUpperCase(), 2)">Validar Palavra 2</button>
                </div>
                <div class="space">
                   <label>Palavra 3</label>
                   <input id="palavracorreta3"></input>
-                  <button id="validarpalavra3" onclick="validarPalavra(palavracorreta3.value, 3)">Validar Palavra 3</button>
+                  <button id="validarpalavra3" onclick="validarPalavra(palavracorreta3.value.toUpperCase(), 3)">Validar Palavra 3</button>
                </div>
             </div>
          </div>
